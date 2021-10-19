@@ -1,4 +1,4 @@
 #!/bin/bash
-echo "iperf3 Testing: client"
-echo "Running against: $IPERF3_HOSTNAME"
+echo "iperf3 testing: client"
+echo "Running against host: $IPERF3_HOSTNAME"
 iperf3 -c $IPERF3_HOSTNAME
