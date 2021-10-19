@@ -1,0 +1,11 @@
+#Ignore debian files
+*.deb
+
+#Ignore tgz files
+*.tgz
+*.tar.gz
+*.tar
+
+#Ignore misc
+build.sh
+secret.yaml
