@@ -26,7 +26,7 @@ spec:
       containers:
       - env:
         - name: IPERF3_HOSTNAME
-          value: 10.130.4.200
+          value: iperf3-server
 #        image: uk.icr.io/mqperf/iperf3-client
         image: docker.io/stmassey/iperf3-client
 #        imagePullPolicy: IfNotPresent
