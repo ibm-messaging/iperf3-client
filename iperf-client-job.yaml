@@ -1,0 +1,49 @@
+apiVersion: batch/v1 
+kind: Job
+metadata:
+  labels:
+    run: iperf3-client
+  name: iperf3-client
+#  namespace: iperf
+spec:
+  template:
+    metadata:
+      labels:
+        run: iperf3-client
+#      annotations:
+#        k8s.v1.cni.cncf.io/networks: mqns/tengig
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                - key: deployment
+                  operator: In
+                  values:
+                  - iperf3-server
+              topologyKey: kubernetes.io/hostname
+      containers:
+      - env:
+        - name: IPERF3_HOSTNAME
+          value: 10.130.4.200
+#        image: uk.icr.io/mqperf/iperf3-client
+        image: docker.io/stmassey/iperf3-client
+#        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
+        name: iperf3-client
+        resources: 
+          requests:
+            memory: "1Gi"
+            cpu: "4"
+          limits:
+            memory: "1Gi"
+            cpu: "4"
+        terminationMessagePath: /dev/termination-log
+      dnsPolicy: ClusterFirst
+      restartPolicy: OnFailure
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+#      nodeSelector: 
+#        kubernetes.io/hostname : worker5.<hostname>
+        
