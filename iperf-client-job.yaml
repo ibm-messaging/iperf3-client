@@ -6,6 +6,10 @@ metadata:
   name: iperf3-client
 #  namespace: iperf
 spec:
+# Set to match number of available server instances, default is 1
+# Relying on the svc to round robin the clients to the servers doesnt seem to work, so have to generate
+# different job files with the different endpoints of the servers you wish to connect to
+  parallelism: 1
   template:
     metadata:
       labels:
@@ -17,16 +21,14 @@ spec:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             - labelSelector:
-                matchExpressions:
-                - key: deployment
-                  operator: In
-                  values:
-                  - iperf3-server
+                deployment: iperf3-server
+                job-name: iperf3-client
               topologyKey: kubernetes.io/hostname
       containers:
       - env:
         - name: IPERF3_HOSTNAME
           value: iperf3-server
+ #         value: 172.30.218.144
 #        image: uk.icr.io/mqperf/iperf3-client
         image: docker.io/stmassey/iperf3-client
 #        imagePullPolicy: IfNotPresent
@@ -35,10 +37,10 @@ spec:
         resources: 
           requests:
             memory: "1Gi"
-            cpu: "4"
+            cpu: "2"
           limits:
             memory: "1Gi"
-            cpu: "4"
+            cpu: "2"
         terminationMessagePath: /dev/termination-log
       dnsPolicy: ClusterFirst
       restartPolicy: OnFailure
